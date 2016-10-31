@@ -1,80 +1,80 @@
-var $ = require('jquery');
 var React = require('react');
+var Backbone = require('backbone');
 //local
-
+var shirtModels = require('../models/catalog');
 //components
 
+var ShirtListing = React.createClass({
+  render: function(){
+    var self = this;
+    var productListing = this.props.shirts.map(function(item){
+      return (
+        <div key={item.cid} className="card col-md-4">
+          <div className="card-block">
+            <h4 className="card-title">{item.get('title')}</h4>
+          </div>
+          <img src={item.get('image')} alt="Card image"/>
+        <div className="card-block">
+          <p className="card-text">A great t-shirt made to equip the outdoors-lover</p>
+          <input type="text" className="form-control" placeholder="Select your size"/>
+          <a href="#" onClick={function(){self.props.addToCart(item)}}className="btn btn-primary">Add to cart</a>
+        </div>
+      </div>
+      );
+    });
+    return(
+      <div>
+        {productListing}
+      </div>
+    );
+  }
+});
+
 var CatalogComponent = React.createClass({
+  getInitialState: function(){
+    var shirts = new shirtModels.ShirtCollection();
+
+    shirts.add([
+      {
+        "title": "Red Shirt",
+        "image": 'https://unsplash.it/200/300'
+      },
+      {
+        "title": "Green Shirt",
+        "image": 'https://unsplash.it/200/300'
+      },
+      {
+        "title": "Blue Shirt",
+        "image": 'https://unsplash.it/200/300'
+      }
+    ]);
+    return {
+      shirts: shirts
+    }
+  },
   navCatalog: function(){
-    console.log('going to catalog');
     var router = this.props.router;
     router.navigate('shop/', {trigger: true});
   },
   navCart: function(){
-    console.log('going to cart');
     var router = this.props.router;
     router.navigate('cart/', {trigger: true});
   },
-  addToCart: function(){
-    // var $this = $(this);
-    var name = $(this).h4.text();
-    var size = $(this).input.val();
-    localStorage.setItem('name', JSON.stringify(name));
-    localStorage.setItem('size', JSON.stringify(size));
+  addToCart: function(item){
+    localStorage.setItem('order', JSON.stringify(item));
   },
   render: function(){
-    var username = localStorage.getItem("username");
+    var username = localStorage.getItem('username');
     return(
-
-  <div>
-
-    <nav>
-      <h4>Classy Hound</h4>
-      <h5>Hello, {username}</h5>
-      <span className="nav-spans" onClick={this.navCatalog}>T-Shirts</span>
-      <span className="nav-spans" onClick={this.navCart}>Cart</span>
-    </nav>
-
-
-    <div className="card col-md-4">
-      <div className="card-block">
-        <h4 className="card-title">Red T-Shirt</h4>
-        <h6 className="card-subtitle text-muted">Support card subtitle</h6>
+      <div>
+        <nav>
+          <h4>Classy Hound</h4>
+          <h5>Hello, {username}</h5>
+          <span className="nav-spans" onClick={this.navCatalog}>T-Shirts</span>
+          <span className="nav-spans" onClick={this.navCart}>Cart</span>
+        </nav>
+        <ShirtListing shirts={this.state.shirts} addToCart={this.addToCart} />
       </div>
-      <img src="https://unsplash.it/200/200" alt="Card image"/>
-      <div className="card-block">
-        <p className="card-text">A great t-shirt made to equip the outdoors-lover</p>
-        <input type="text" className="form-control" placeholder="Select your size"/>
-        <a href="#" onClick={this.addToCart} className="btn btn-primary">Add to cart</a>
-      </div>
-    </div>
-
-    <div className="card col-md-4">
-      <div className="card-block">
-        <h4 className="card-title">Black T-Shirt</h4>
-        <h6 className="card-subtitle text-muted">Support card subtitle</h6>
-      </div>
-      <img src="https://unsplash.it/200/200" alt="Card image"/>
-      <div className="card-block">
-        <p className="card-text">A great t-shirt made to equip the outdoors-lover</p>
-        <input type="text" className="form-control" placeholder="Select your size"/>
-        <a href="#" className="btn btn-primary">Add to cart</a>
-      </div>
-    </div>
-
-    <div className="card col-md-4">
-      <div className="card-block">
-        <h4 className="card-title">Green T-Shirt</h4>
-        <h6 className="card-subtitle text-muted">Support card subtitle</h6>
-      </div>
-      <img src="https://unsplash.it/200/200" alt="Card image"/>
-      <div className="card-block">
-        <p className="card-text">A great t-shirt made to equip the outdoors-lover</p>
-        <input type="text" className="form-control" placeholder="Select your size"/>
-        <a href="#" className="btn btn-primary">Add to cart</a>
-      </div>
-    </div>
-  </div>
     );
   }
 });

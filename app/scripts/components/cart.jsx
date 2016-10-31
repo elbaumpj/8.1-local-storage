@@ -1,8 +1,44 @@
 var React = require('react');
-
+var Backbone = require('backbone');
 //local
 
 //components
+
+var OrderedItems = React.createClass({
+  render: function(){
+    var orders = JSON.parse(localStorage.getItem('order'));
+    var orderArray = [];
+    orderArray.push(orders);
+    var orderListing = orderArray.map(function(order){
+    var username = localStorage.getItem('username');
+      return(
+        <tr key={order.cid}>
+    <td>{order.title}</td>
+    <td>Otto</td>
+    <td>@mdo</td>
+        </tr>
+      );
+    });
+    return(
+      <div>
+
+        <table className="table">
+          <thead>
+            <tr>
+        <th>Shirt</th>
+        <th>Size</th>
+        <th>Quantity</th>
+        <th>Deal Expires</th>
+            </tr>
+          </thead>
+          <tbody>
+            {orderListing}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+});
 
 var CartComponent = React.createClass({
   navCatalog: function(){
@@ -14,7 +50,7 @@ var CartComponent = React.createClass({
     router.navigate('cart/', {trigger: true});
   },
   render: function(){
-    var username = localStorage.getItem("username");
+    var username = localStorage.getItem('username');
     return(
       <div>
         <nav>
@@ -23,37 +59,7 @@ var CartComponent = React.createClass({
           <span className="nav-spans" onClick={this.navCatalog}>T-Shirts</span>
           <span className="nav-spans" onClick={this.navCart}>Cart</span>
         </nav>
-
-        <table className="table">
-          <thead>
-            <tr>
-        <th>#</th>
-        <th>Shirt</th>
-        <th>Size</th>
-        <th>Deal Expires</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-            </tr>
-            <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-            </tr>
-            <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-            </tr>
-          </tbody>
-        </table>
+        <OrderedItems />
       </div>
     );
   }
