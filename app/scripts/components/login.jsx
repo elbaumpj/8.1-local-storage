@@ -1,3 +1,4 @@
+var $ = require('jquery');
 var React = require('react');
 
 //local
@@ -6,14 +7,11 @@ var React = require('react');
 
 
 var LoginComponent = React.createClass({
-  handleUserName: function(e){
-    console.log("username stored");
-    var username = e.target.value;
-
-    localStorage.setItem('username', JSON.stringify(username));
-  },
   handleSubmit: function(e){
     e.preventDefault();
+
+    var username = $('.username-form').val();
+    localStorage.setItem('username', JSON.stringify(username));
 
     var router = this.props.router;
     router.navigate('shop/', {trigger: true});
@@ -23,7 +21,7 @@ var LoginComponent = React.createClass({
       <form onSubmit={this.handleSubmit}>
        <div className="form-group col-md-6">
          <label htmlFor="username">Username</label>
-         <input onChange={this.handleUserName} type="text" className="form-control" id="username" placeholder="Enter your username"/>
+         <input type="text" className="form-control username-form" id="username" placeholder="Enter your username"/>
          <button type="submit" className="btn btn-success">Login</button>
        </div>
      </form>
