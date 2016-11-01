@@ -9,6 +9,7 @@ var OrderedItems = React.createClass({
     var orders = JSON.parse(localStorage.getItem('order'));
     var orderArray = [];
     orderArray.push(orders);
+    
     var orderListing = orderArray.map(function(order){
     var username = localStorage.getItem('username');
       return(
